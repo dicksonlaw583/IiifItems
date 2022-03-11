@@ -49,6 +49,11 @@
 //                        $defaultManifest = absolute_url(array('things' => $type, 'id' => $submanifests[0]->id), 'iiifitems_manifest');
 //                    }
 //                }
+                $defaultCanvas = '';
+                if ($type === 'exhibit_page_blocks') {
+                    $thingOptions = $thing->getOptions();
+                    $defaultCanvas = @$thingOptions['defaultCanvas'] ?: 1;
+                }
             ?>
             <?php if ($type == 'collections' && IiifItems_Util_Collection::isCollection($thing)) : ?>
             "openManifestsPage": true,
@@ -56,6 +61,7 @@
             "windowObjects": [{
                 imageMode: "ImageView",
                 loadedManifest: "<?php echo $defaultManifest; ?>",
+                <?php if (!empty($defaultCanvas)) { echo "canvasID: $defaultCanvas,"; } ?>
                 slotAddress: "row1.column1",
                 viewType: "ImageView",
                 displayLayout: <?php echo ($type != 'collections' || !IiifItems_Util_Collection::isCollection($thing)) ? 'false' : 'true'; ?>,

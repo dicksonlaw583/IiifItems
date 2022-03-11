@@ -61,6 +61,7 @@
                 imageMode: "ImageView",
                 <?php if (!empty($urls) && !$popup): ?>
                 loadedManifest: <?php echo $urls[0]; ?>,
+                <?php if (!empty($defaultCanvas)) { echo "canvasID: $defaultCanvas,"; } ?>
                 <?php endif; ?>
                 sidePanel: true,
                 slotAddress: "row1.column1",

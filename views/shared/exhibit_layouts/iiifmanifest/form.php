@@ -2,12 +2,18 @@
 $formStem = $block->getFormStem();
 $options  = $block->getOptions();
 $template = '<div class="mirador-manifest-row">'
-        . $this->formSelect("{$formStem}[options][types][]", 'Manifest', array('style' => 'width: 18%; margin-right: 2%; height: 30px; margin-bottom: 10px;', 'multiple' => false), array('Manifest' => 'Manifest', 'Collection' => 'Collection'))
+        . $this->formSelect("{$formStem}[options][types][]", 'Manifest', array('style' => 'width: 18%; margin-right: 2%; margin-bottom: 10px;', 'multiple' => false), array('Manifest' => 'Manifest', 'Collection' => 'Collection'))
         . $this->formText("{$formStem}[options][manifests][]", '', array('style' => 'width:80%;', 'placeholder' => 'URL'))
         . '<button class="add-manifest">Add Another</button>'
         . '<button class="red remove-manifest">Remove</button>'
         . '</div>';
 ?>
+
+<div class="showcase-position">
+<h4><?php echo __('Show page number:'); ?></h4>
+<input type="number" name="<?php echo $formStem; ?>[options][defaultCanvas]" value="<?php echo @$options['defaultCanvas'] ?: 1; ?>" min="1">
+</div>
+
 <div class="mirador-manifest-form" id="mirador-manifest-form-<?php $block->id ?>" data-template="<?php echo html_escape($template); ?>">
     <script>
         jQuery('#mirador-manifest-form-<?php $block->id ?>').ready(function() {
@@ -58,7 +64,7 @@ $template = '<div class="mirador-manifest-row">'
     }
     foreach (@$options['manifests'] as $i => $manifest) {
         echo '<div class="mirador-manifest-row">';
-        echo $this->formSelect("{$formStem}[options][types][]", @$options['types'][$i], array('style' => 'width: 18%; margin-right: 2%; height: 30px; margin-bottom: 10px;', 'multiple' => false), array('Manifest' => 'Manifest', 'Collection' => 'Collection'));
+        echo $this->formSelect("{$formStem}[options][types][]", @$options['types'][$i], array('style' => 'width: 18%; margin-right: 2%; margin-bottom: 10px;', 'multiple' => false), array('Manifest' => 'Manifest', 'Collection' => 'Collection'));
         echo $this->formText("{$formStem}[options][manifests][]", $manifest, array('style' => 'width:80%;', 'placeholder' => 'URL'));
         echo '<button class="add-manifest">Add Another</button>';
         echo '<button class="red remove-manifest">Remove</button>';

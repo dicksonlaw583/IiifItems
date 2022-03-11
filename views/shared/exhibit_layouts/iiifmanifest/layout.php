@@ -4,6 +4,7 @@
             'u' => array(),
             'c' => array(),
             'p' => !empty($options['types']) && $options['types'][0] == 'Collection',
+            'd' => empty($options['defaultCanvas']) ? 1 : $options['defaultCanvas'],
         );
         foreach ($options['manifests'] as $i => $url) {
             if ($options['types'][$i] == 'Collection') {

@@ -36455,6 +36455,9 @@ this._cbs.ontext(data)}};Tokenizer.prototype.reset=function(){Tokenizer.call(thi
       });
 
       _this.imagesList = _this.manifest.getCanvases();
+      if (typeof _this.canvasID === 'number') {
+        _this.canvasID = _this.imagesList[_this.canvasID-1]['@id'];
+      }
       if (!_this.canvasID) {
         _this.canvasID = _this.imagesList[0]['@id'];
       }
