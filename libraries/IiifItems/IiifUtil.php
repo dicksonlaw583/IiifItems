@@ -85,6 +85,43 @@ class IiifItems_IiifUtil {
             }
         }
     }
+
+    /**
+     * Apply Dublin Core metadata from the record onto the JSON array in IIIF v3 form
+     * @param array $jsonData
+     * @param Record $record
+     */
+    protected static function addDublinCoreMetadataV3(&$jsonData, $record) {
+        $elements = all_element_texts($record, array(
+            'return_type' => 'array',
+            'show_element_set_headings' => true,
+        ));
+        if (isset($elements['Dublin Core'])) {
+            if (isset($elements['Dublin Core']['Title'])) {
+                $jsonData['label'] = array('en' => $elements['Dublin Core']['Title']);
+                unset($elements['Dublin Core']['Title']);
+            }
+            if (isset($elements['Dublin Core']['Description'])) {
+                $jsonData['summary'] = array('en' => $elements['Dublin Core']['Description']);
+                unset($elements['Dublin Core']['Description']);
+            }
+            if (isset($elements['Dublin Core']['Rights'])) {
+                $jsonData['rights'] = join('<br>', $elements['Dublin Core']['Rights']);
+                unset($elements['Dublin Core']['Rights']);
+            }
+            if (!empty($elements['Dublin Core'])) {
+                if (!isset($jsonData['metadata'])) {
+                    $jsonData['metadata'] = array();
+                }
+                foreach ($elements['Dublin Core'] as $elementName => $elementContent) {
+                    $jsonData['metadata'][] = array(
+                        'label' => $elementName,
+                        'value' => join('<br>', $elementContent)
+                    );
+                }
+            }
+        }
+    }
     
     /**
      * Attach a LEFT JOIN to the given metadata elements, with the given prefixes

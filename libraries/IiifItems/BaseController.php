@@ -5,6 +5,14 @@
  * @package IiifItems
  */
 abstract class IiifItems_BaseController extends Omeka_Controller_AbstractActionController {
+    protected static $collectionHelperRegistry = array(
+        'oa' => IiifItems_Util_Collection::class,
+        'iiifv3' => IiifItems_Util_Collection3::class,
+    );
+    protected static $manifestHelperRegistry = array(
+        'oa' => IiifItems_Util_Manifest::class,
+        'iiifv3' => IiifItems_Util_Manifest3::class,
+    );
     
     /**
      * Retrieves a record from the parameter-given ID (id) and type (things) and passes it to the view.

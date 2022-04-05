@@ -1,10 +1,10 @@
 <?php
 /**
- * Utilities for IIIF canvases.
+ * Utilities for IIIFv3 canvases.
  * @package IiifItems
  * @subpackage Util
  */
-class IiifItems_Util_Canvas extends IiifItems_IiifUtil {
+class IiifItems_Util_Canvas3 extends IiifItems_Util_Canvas {
     /**
      * Basic template for IIIF Presentation API canvas
      * @param string $atId The unique URI ID for this canvas
@@ -16,12 +16,12 @@ class IiifItems_Util_Canvas extends IiifItems_IiifUtil {
      */
     public static function blankTemplate($atId, $width, $height, $label, $images=array()) {
         return array(
-            '@id' => $atId,
-            'label' => $label,
-            '@type' => 'sc:Canvas',
+            'id' => $atId,
+            'label' => array('en' => array($label)),
+            'type' => 'Canvas',
             'width' => $width,
             'height' => $height,
-            'images' => $images,
+            'items' => $images,
         );
     }
 
@@ -38,14 +38,14 @@ class IiifItems_Util_Canvas extends IiifItems_IiifUtil {
         try {
             $iiifJsonData = parent::fetchJsonData($item);
             if ($iiifJsonData) {
-                $canvasId = $iiifJsonData['@id'];
+                $canvasId = $iiifJsonData['id'];
             }
         } catch (Exception $e) {
         }
         // If unavailable or corrupted, generate a default
         if (!$canvasId) {
             $canvasId = public_full_url(array(
-                'version' => 'oa',
+                'version' => 'iiifv3',
                 'things' => 'items',
                 'id' => $item->id,
                 'typeext' => 'canvas.json',
@@ -63,26 +63,23 @@ class IiifItems_Util_Canvas extends IiifItems_IiifUtil {
                 array('iiifitems_' . $representativeType, 'jpg', 'iiifitems_' . $representativeType . '.jpg'), 
                 get_option('iiifitems_bridge_prefix')
             );
-            $iiifJsonData['images'][] = array(
-                '@id' => public_full_url(array(
-                    'version' => 'oa',
-                    'things' => 'item',
-                    'id' => $item->id,
-                    'typeext' => 'anno.json',
-                ), 'iiifitems_oa_uri'),
-                '@type' => 'oa:Annotation',
-                'motivation' => 'sc:painting',
-                'on' => $canvasId,
-                'resource' => array(
-                    '@id' => $representativeUrlBase . '/full/full/0/default.jpg',
-                    '@type' => 'dctypes:Image',
-                    'format' => 'image/jpeg',
-                    'width' => 300,
-                    'height' => 300,
-                    'service' => array(
-                        '@id' => $representativeUrlBase,
-                        '@context' => 'http://iiif.io/api/image/2/context.json',
-                        'profile' => 'http://iiif.io/api/image/2/level2.json',
+            $iiifJsonData['items'][] = array(
+                'id' => $representativeUrlBase . '/' . (count($iiifJsonData['items'])+1),
+                'type' => 'AnnotationPage',
+                'items' => array(
+                    'motivation' => 'painting',
+                    'target' => $canvasId,
+                    'body' => array(
+                        'id' => $representativeUrlBase . '/full/full/0/default.jpg',
+                        'type' => 'Image',
+                        'format' => 'image/jpeg',
+                        'width' => 300,
+                        'height' => 300,
+                        'service' => array(
+                            'id' => $representativeUrlBase,
+                            '@context' => 'http://iiif.io/api/image/2/context.json',
+                            'profile' => 'http://iiif.io/api/image/2/level2.json',
+                        ),
                     ),
                 ),
             );
@@ -91,15 +88,15 @@ class IiifItems_Util_Canvas extends IiifItems_IiifUtil {
         }
         else {
             if (!empty($itemFiles)) {
-                if (!isset($iiifJsonData['images']) || empty($iiifJsonData['images']) || parent::fetchJsonData($itemFiles[0])) {
-                    $iiifJsonData['images'] = array();
+                if (!isset($iiifJsonData['items']) || empty($iiifJsonData['items']) || parent::fetchJsonData($itemFiles[0])) {
+                    $iiifJsonData['items'] = array();
                     foreach ($itemFiles as $file) {
-                        $iiifJsonData['images'][] = self::fileImageJson($file, $canvasId);
+                        $iiifJsonData['items'][] = self::fileImageJson($file, $canvasId);
                     }
                 }
                 // If the default canvas template is used, set the width and height to the max among files
                 if (!$iiifJsonData['width'] && !$iiifJsonData['height']) {
-                    foreach ($iiifJsonData['images'] as $fileJson) {
+                    foreach ($iiifJsonData['items'] as $fileJson) {
                         if ($fileJson['resource']['width'] > $iiifJsonData['width']) {
                             $iiifJsonData['width'] = $fileJson['resource']['width'];
                         }
@@ -112,20 +109,20 @@ class IiifItems_Util_Canvas extends IiifItems_IiifUtil {
         }
         // Plug DC metadata
         if ($applyDublin) {
-            parent::addDublinCoreMetadata($iiifJsonData, $item);
+            parent::addDublinCoreMetadataV3($iiifJsonData, $item);
         }
         // Plug otherContent for annotation lists
         if (is_admin_theme()) {
             $iiifJsonData['otherContent'] = array();
         } else {
             $iiifJsonData['otherContent'] = array(array(
-                '@id' => public_full_url(array(
-                    'version' => 'oa',
+                'id' => public_full_url(array(
+                    'version' => 'iiifv3',
                     'things' => 'items',
                     'id' => $item->id,
                     'typeext' => 'annolist.json',
                 ), 'iiifitems_oa_uri'),
-                '@type' => 'sc:AnnotationList',
+                'type' => 'AnnotationPage',
             ));
         }
         // Done
@@ -142,13 +139,13 @@ class IiifItems_Util_Canvas extends IiifItems_IiifUtil {
     public static function buildAnnotationCanvas($annotation, $canvasId=null, $applyDublin=true) {
         $base = self::buildCanvas(IiifItems_Util_Annotation::findAnnotatedItemFor($annotation));
         $base['otherContent'] = array(array(
-            '@id' => public_full_url(array(
-                'version' => 'oa',
+            'id' => public_full_url(array(
+                'version' => 'iiifv3',
                 'things' => 'items',
                 'id' => $annotation->id,
                 'typeext' => 'annolist.json',
             ), 'iiifitems_oa_uri'),
-            '@type' => 'sc:AnnotationList',
+            'type' => 'AnnotationPage',
         ));
         return $base;
     }
@@ -181,22 +178,22 @@ class IiifItems_Util_Canvas extends IiifItems_IiifUtil {
             list($fileWidth, $fileHeight) = getimagesize(FILES_DIR . DIRECTORY_SEPARATOR . $file->getStoragePath());
         }
         $fileJson = array(
-            '@id' => public_full_url(array(
-                'version' => 'oa',
+            'id' => public_full_url(array(
+                'version' => 'iiifv3',
                 'things' => 'files',
                 'id' => $file->id,
                 'typeext' => 'anno.json',
             ), 'iiifitems_oa_uri'),
-            'motivation' => 'sc:painting',
-            '@type' => 'oa:Annotation',
+            'motivation' => 'painting',
+            'type' => 'Annotation',
             'resource' => array(
-                '@id' => $file->getWebPath('original'),
-                '@type' => 'dctypes:Image',
+                'id' => $file->getWebPath('original'),
+                'type' => 'dctypes:Image',
                 'format' => $file->mime_type,
                 'width' => $fileWidth,
                 'height' => $fileHeight,
                 'service' => array(
-                    '@id' => self::fileIiifPrefix($file),
+                    'id' => self::fileIiifPrefix($file),
                     '@context' => 'http://iiif.io/api/image/2/context.json',
                     'profile' => 'http://iiif.io/api/image/2/level2.json',
                 ),
@@ -232,7 +229,7 @@ class IiifItems_Util_Canvas extends IiifItems_IiifUtil {
         // Default IDs and display titles
         if (!$canvasId) {
             $canvasId = public_full_url(array(
-                'version' => 'oa',
+                'version' => 'iiifv3',
                 'things' => 'files',
                 'id' => $file->id,
                 'typeext' => 'canvas.json',
@@ -245,7 +242,7 @@ class IiifItems_Util_Canvas extends IiifItems_IiifUtil {
         $json = self::blankTemplate($canvasId, $fileImageJson['resource']['width'], $fileImageJson['resource']['height'], $displayTitle, array($fileImageJson));
         // Apply Dublin Core metadata
         if ($applyDublin) {
-            parent::addDublinCoreMetadata($json, $file);
+            parent::addDublinCoreMetadataV3($json, $file);
         }
         return $json;
     }

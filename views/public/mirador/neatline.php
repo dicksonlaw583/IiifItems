@@ -20,7 +20,7 @@
     <script src="<?php echo $urlJs; ?>"></script>
     <script type="text/javascript">
     $(function() {
-        var default_manifest = <?php echo js_escape(absolute_url(array('things' => 'items', 'id' => $itemId), 'iiifitems_manifest')); ?>;
+        var default_manifest = <?php echo js_escape(absolute_url(array('version' => 'oa', 'things' => 'items', 'id' => $itemId), 'iiifitems_manifest')); ?>;
         Mirador({
             "id": "viewer",
             "buildPath": "<?php echo html_escape($mirador_path) . '/'; ?>",

@@ -69,7 +69,7 @@ class IiifItems_Util_Annotation extends IiifItems_IiifUtil {
      * @return array
      */
     public static function buildList($item) {
-        $atId = public_full_url(array('things' => 'items', 'id' => $item->id, 'typeext' => 'annolist.json'), 'iiifitems_oa_uri');
+        $atId = public_full_url(array('version' => 'oa', 'things' => 'items', 'id' => $item->id, 'typeext' => 'annolist.json'), 'iiifitems_oa_uri');
         if ($item->item_type_id == get_option('iiifitems_annotation_item_type')) {
             return self::blankListTemplate($atId, array(self::buildAnnotation($item)));
         } else {
@@ -108,7 +108,7 @@ class IiifItems_Util_Annotation extends IiifItems_IiifUtil {
         }
         if ($attachedItem = IiifItems_Util_Annotation::findAnnotatedItemFor($annoItem)) {
             if (!($canvasId = raw_iiif_metadata($attachedItem, 'iiifitems_item_atid_element'))) {
-                $canvasId = public_full_url(array('things' => 'items', 'id' => $attachedItem->id, 'typeext' => 'canvas.json'), 'iiifitems_oa_uri');
+                $canvasId = public_full_url(array('version' => 'oa', 'things' => 'items', 'id' => $attachedItem->id, 'typeext' => 'canvas.json'), 'iiifitems_oa_uri');
             }
             $svgSelectors = self::getAnnotationSvg($annoItem);
             $xywhSelectors = self::getAnnotationXywh($annoItem);
@@ -284,6 +284,7 @@ class IiifItems_Util_Annotation extends IiifItems_IiifUtil {
         }
         return array(array(
             '@id' => public_full_url(array(
+                'version' => 'oa', 
                 'things' => 'files',
                 'id' => $file->id,
                 'typeext' => 'anno.json',
@@ -291,6 +292,7 @@ class IiifItems_Util_Annotation extends IiifItems_IiifUtil {
             '@type' => 'oa:Annotation',
             'motivation' => 'oa:linking',
             'on' => public_full_url(array(
+                'version' => 'oa', 
                 'things' => 'items',
                 'id' => $item->id,
                 'typeext' => 'canvas.json',

@@ -66,7 +66,7 @@ class IiifItems_Util_Collection extends IiifItems_IiifUtil {
      */
     public static function buildCollection($collection, $cacheAs=null) {
         // Set default IDs and titles
-        $atId = public_full_url(array('things' => 'collections', 'id' => $collection->id, 'typeext' => 'collection.json'), 'iiifitems_oa_uri');
+        $atId = public_full_url(array('version' => 'oa', 'things' => 'collections', 'id' => $collection->id, 'typeext' => 'collection.json'), 'iiifitems_oa_uri');
         $label = metadata($collection, array('Dublin Core', 'Title'), array('no_escape' => true));
         // Do it only for collections
         if (self::isCollection($collection)) {
@@ -87,12 +87,12 @@ class IiifItems_Util_Collection extends IiifItems_IiifUtil {
             $json['collections'] = array();
             $json['manifests'] = array();
             foreach (self::findSubcollectionsFor($collection) as $subcollection) {
-                $subAtId = public_full_url(array('things' => 'collections', 'id' => $subcollection->id, 'typeext' => 'collection.json'), 'iiifitems_oa_uri');
+                $subAtId = public_full_url(array('version' => 'oa', 'version' => 'oa', 'things' => 'collections', 'id' => $subcollection->id, 'typeext' => 'collection.json'), 'iiifitems_oa_uri');
                 $label = metadata($subcollection, array('Dublin Core', 'Title'), array('no_escape' => true));
                 $json['collections'][] = IiifItems_Util_Collection::bareTemplate($subAtId, $label);
             }
             foreach (self::findSubmanifestsFor($collection) as $submanifest) {
-                $subAtId = public_full_url(array('things' => 'collections', 'id' => $submanifest->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
+                $subAtId = public_full_url(array('version' => 'oa', 'things' => 'collections', 'id' => $submanifest->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
                 $label = metadata($submanifest, array('Dublin Core', 'Title'), array('no_escape' => true));
                 $json['manifests'][] = IiifItems_Util_Manifest::bareTemplate($subAtId, $label);
             }
@@ -101,7 +101,7 @@ class IiifItems_Util_Collection extends IiifItems_IiifUtil {
             parent::addDublinCoreMetadata($json, $collection);
             // Override within
             if ($parentCollection = IiifItems_Util_Collection::findParentFor($collection)) {
-                $json['within'] = public_full_url(array('things' => 'collections', 'id' => $parentCollection->id, 'typeext' => 'collection.json'), 'iiifitems_oa_uri');
+                $json['within'] = public_full_url(array('version' => 'oa', 'things' => 'collections', 'id' => $parentCollection->id, 'typeext' => 'collection.json'), 'iiifitems_oa_uri');
             } else if (isset($json['within'])) {
                 unset($json['within']);
             }
@@ -122,7 +122,7 @@ class IiifItems_Util_Collection extends IiifItems_IiifUtil {
      */
     public static function buildMembersCollection($collection, $cacheAs=null) {
         // Set default IDs and titles
-        $atId = public_full_url(array('things' => 'collections', 'id' => $collection->id, 'typeext' => 'collection.json'), 'iiifitems_oa_uri');
+        $atId = public_full_url(array('version' => 'oa', 'things' => 'collections', 'id' => $collection->id, 'typeext' => 'collection.json'), 'iiifitems_oa_uri');
         $label = metadata($collection, array('Dublin Core', 'Title'), array('no_escape' => true));
         // Do it only for collections
         if (self::isCollection($collection)) {
@@ -146,12 +146,12 @@ class IiifItems_Util_Collection extends IiifItems_IiifUtil {
             $json['members'] = array();
             foreach (self::findMembersFor($collection) as $member) {
                 if (self::isCollection($member)) {
-                    $atId = public_full_url(array('things' => 'collections', 'id' => $member->id, 'typeext' => 'collection.json'), 'iiifitems_oa_uri');
+                    $atId = public_full_url(array('version' => 'oa', 'things' => 'collections', 'id' => $member->id, 'typeext' => 'collection.json'), 'iiifitems_oa_uri');
                     $label = metadata($member, array('Dublin Core', 'Title'), array('no_escape' => true));
                     $json['collections'][] = IiifItems_Util_Collection::bareTemplate($atId, $label);
                 }
                 else {
-                    $atId = public_full_url(array('things' => 'collections', 'id' => $member->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
+                    $atId = public_full_url(array('version' => 'oa', 'things' => 'collections', 'id' => $member->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
                     $label = metadata($member, array('Dublin Core', 'Title'), array('no_escape' => true));
                     $json['manifests'][] = IiifItems_Util_Manifest::bareTemplate($atId, $label);
                 }

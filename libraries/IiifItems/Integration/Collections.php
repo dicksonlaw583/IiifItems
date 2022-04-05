@@ -228,7 +228,7 @@ class IiifItems_Integration_Collections extends IiifItems_BaseIntegration {
             case 'Collection':
                 $iiifLabel = __('IIIF Collection Information');
                 $urlLabel = __('Collection URL');
-                $iiifUrl = public_full_url(array('things' => 'collections', 'id' => $args['view']->collection->id), 'iiifitems_collection');
+                $iiifUrl = public_full_url(array('version' => 'oa', 'things' => 'collections', 'id' => $args['view']->collection->id), 'iiifitems_collection');
                 $count = IiifItems_Util_Collection::countSubmembersFor($args['collection']);
                 echo '<script>jQuery(document).ready(function() { jQuery(".total-items a:first").attr("href", ' . js_escape(admin_url(array('id' => $args['collection']->id), 'iiifitems_collection_members')) . ').text("' . $count . '"); });</script>';
             break;
@@ -238,7 +238,7 @@ class IiifItems_Integration_Collections extends IiifItems_BaseIntegration {
                 }
                 $iiifLabel = __('IIIF Manifest Information');
                 $urlLabel = __('Manifest URL');
-                $iiifUrl = public_full_url(array('things' => 'collections', 'id' => $args['view']->collection->id), 'iiifitems_manifest');
+                $iiifUrl = public_full_url(array('version' => 'oa', 'things' => 'collections', 'id' => $args['view']->collection->id), 'iiifitems_manifest');
             break;
         }
         echo '<div class="element-set">';
@@ -397,7 +397,7 @@ EOF;
             case 'Collection':
                 $iiifLabel = __('IIIF Collection');
                 $urlLabel = __('Collection URL');
-                $iiifUrl = absolute_url(array('things' => 'collections', 'id' => $args['view']->collection->id), 'iiifitems_collection');
+                $iiifUrl = absolute_url(array('version' => 'oa', 'things' => 'collections', 'id' => $args['view']->collection->id), 'iiifitems_collection');
                 if ($args['collection']->totalItems() == 0) {
                     echo '<script>jQuery(document).ready(function() { jQuery("#collection-items").remove(); });</script>';
                 }
@@ -405,7 +405,7 @@ EOF;
             case 'Manifest': default:
                 $iiifLabel = __('IIIF Manifest');
                 $urlLabel = __('Manifest URL');
-                $iiifUrl = absolute_url(array('things' => 'collections', 'id' => $args['view']->collection->id), 'iiifitems_manifest');
+                $iiifUrl = absolute_url(array('version' => 'oa', 'things' => 'collections', 'id' => $args['view']->collection->id), 'iiifitems_manifest');
             break;
         }
         echo '<div class="element-set">';

@@ -51,8 +51,8 @@ class IiifItems_Util_Manifest extends IiifItems_IiifUtil {
      */
     public static function buildManifest($collection, $bare=false) {
         // Set default IDs and titles
-        $atId = public_full_url(array('things' => 'collections', 'id' => $collection->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
-        $seqId = public_full_url(array('things' => 'collections', 'id' => $collection->id, 'typeext' => 'sequence.json'), 'iiifitems_oa_uri');
+        $atId = public_full_url(array('version' => 'oa', 'things' => 'collections', 'id' => $collection->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
+        $seqId = public_full_url(array('version' => 'oa', 'things' => 'collections', 'id' => $collection->id, 'typeext' => 'sequence.json'), 'iiifitems_oa_uri');
         $label = metadata($collection, array('Dublin Core', 'Title'), array('no_escape' => true));
         // Do it only for manifests with appropriate authorization
         if (self::isManifest($collection)) {
@@ -87,8 +87,8 @@ class IiifItems_Util_Manifest extends IiifItems_IiifUtil {
      */
     public static function buildItemManifest($item) {
         // Set default IDs and titles
-        $atId = public_full_url(array('things' => 'items', 'id' => $item->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
-        $seqId = public_full_url(array('things' => 'items', 'id' => $item->id, 'typeext' => 'sequence.json'), 'iiifitems_oa_uri');
+        $atId = public_full_url(array('version' => 'oa', 'things' => 'items', 'id' => $item->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
+        $seqId = public_full_url(array('version' => 'oa', 'things' => 'items', 'id' => $item->id, 'typeext' => 'sequence.json'), 'iiifitems_oa_uri');
         $label = metadata($item, array('Dublin Core', 'Title'), array('no_escape' => true));
         // If it is an annotation, use the special annotation canvas utility
         if ($item->item_type_id == get_option('iiifitems_annotation_item_type')) {
@@ -118,8 +118,8 @@ class IiifItems_Util_Manifest extends IiifItems_IiifUtil {
      */
     public static function buildFileManifest($file) {
         // Set default IDs and titles
-        $atId = public_full_url(array('things' => 'files', 'id' => $file->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
-        $seqId = public_full_url(array('things' => 'files', 'id' => $file->id, 'typeext' => 'sequence.json'), 'iiifitems_oa_uri');
+        $atId = public_full_url(array('version' => 'oa', 'things' => 'files', 'id' => $file->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
+        $seqId = public_full_url(array('version' => 'oa', 'things' => 'files', 'id' => $file->id, 'typeext' => 'sequence.json'), 'iiifitems_oa_uri');
         $label = metadata($file, 'display_title', array('no_escape' => true));
         // Use standard file-to-canvas utility
         $json = self::blankTemplate($atId, $seqId, $label, array(
@@ -138,8 +138,8 @@ class IiifItems_Util_Manifest extends IiifItems_IiifUtil {
      */
     public static function buildExhibitPageBlockManifest($block) {
         // Set default IDs and titles
-        $atId = public_full_url(array('things' => 'exhibit_page_blocks', 'id' => $block->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
-        $seqId = public_full_url(array('things' => 'exhibit_page_blocks', 'id' => $block->id, 'typeext' => 'sequence.json'), 'iiifitems_oa_uri');
+        $atId = public_full_url(array('version' => 'oa', 'things' => 'exhibit_page_blocks', 'id' => $block->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
+        $seqId = public_full_url(array('version' => 'oa', 'things' => 'exhibit_page_blocks', 'id' => $block->id, 'typeext' => 'sequence.json'), 'iiifitems_oa_uri');
         $label = $block->getPage()->title;
         // Find attached items in order
         $canvases = array();

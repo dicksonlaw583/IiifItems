@@ -8,7 +8,7 @@
     if (!empty($item_ids)) {
         foreach ($item_ids as $item_id) {
             $types[] = 'Manifest';
-            $urls[] = js_escape(public_full_url(array('things' => 'items', 'id' => $item_id), 'iiifitems_manifest'));
+            $urls[] = js_escape(public_full_url(array('version' => 'oa', 'things' => 'items', 'id' => $item_id), 'iiifitems_manifest'));
         }
     }
     if (!empty($manifests)) {

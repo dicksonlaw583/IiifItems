@@ -29,7 +29,7 @@
             "language": "<?php echo str_replace('_', '-', Zend_Registry::get('bootstrap')->getResource('Locale')->toString()); ?>",
 			"layout": "1",
 			"data": [
-				{ "manifestUri": "<?php echo absolute_url(array('things' => $type, 'id' => $thing->id), 'iiifitems_manifest'); ?>" }
+				{ "manifestUri": "<?php echo absolute_url(array('version' => 'oa', 'things' => $type, 'id' => $thing->id), 'iiifitems_manifest'); ?>" }
 			],
 			annotationEndpoint: {
 				name: 'IiifItemsAnnotations',
@@ -52,7 +52,7 @@
                         },
 			"windowObjects": [{
 				imageMode: "ImageView",
-				loadedManifest: "<?php echo absolute_url(array('things' => $type, 'id' => $thing->id), 'iiifitems_manifest'); ?>",
+				loadedManifest: "<?php echo absolute_url(array('version' => 'oa', 'things' => $type, 'id' => $thing->id), 'iiifitems_manifest'); ?>",
 				slotAddress: "row1.column1",
 				viewType: "ImageView",
 				displayLayout: false,

@@ -79,7 +79,7 @@ class IiifItems_CollectionsController extends IiifItems_BaseController {
         }
         //Respond with JSON
         try {
-            $jsonData = IiifItems_Util_Collection::buildCollection($collection);
+            $jsonData = self::$collectionHelperRegistry[$this->getParam('version')]::buildCollection($collection);
             $this->__respondWithJson($jsonData);
         } catch (Exception $e) {
             $this->__respondWithJson(array(
@@ -109,24 +109,33 @@ class IiifItems_CollectionsController extends IiifItems_BaseController {
      * GET oa/top.json
      */
     public function topAction() {
+        // Get the correct collection and manifest helper
+        $version = $this->getParam('version');
+        $collectionHelper = self::$collectionHelperRegistry[$version];
+        $manifestHelper = self::$manifestHelperRegistry[$version];
         // Get parent-less collections
         $collections = array();
-        foreach (IiifItems_Util_Collection::findTopCollections() as $collection) {
-            $atId = public_full_url(array('things' => 'collections', 'id' => $collection->id, 'typeext' => 'collection.json'), 'iiifitems_oa_uri');
+        foreach ($collectionHelper::findTopCollections() as $collection) {
+            $atId = public_full_url(array('version' => $version, 'things' => 'collections', 'id' => $collection->id, 'typeext' => 'collection.json'), 'iiifitems_oa_uri');
             $label = metadata($collection, array('Dublin Core', 'Title'), array('no_escape' => true));
-            $collections[] = IiifItems_Util_Collection::bareTemplate($atId, $label);
+            $collections[] = $collectionHelper::bareTemplate($atId, $label);
         }
         // Get parent-less manifests
         $manifests = array();
-        foreach (IiifItems_Util_Collection::findTopManifests() as $manifest) {
-            $atId = public_full_url(array('things' => 'collections', 'id' => $manifest->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
+        foreach ($collectionHelper::findTopManifests() as $manifest) {
+            $atId = public_full_url(array('version' => $version, 'things' => 'collections', 'id' => $manifest->id, 'typeext' => 'manifest.json'), 'iiifitems_oa_uri');
             $label = metadata($manifest, array('Dublin Core', 'Title'), array('no_escape' => true));
-            $manifests[] = IiifItems_Util_Manifest::bareTemplate($atId, $label);
+            $manifests[] = $manifestHelper::bareTemplate($atId, $label);
         }
         // Merge and serve
         $atId = public_full_url();
-        $this->__respondWithJson(IiifItems_Util_Collection::blankTemplate($atId, get_option('site_title'), $manifests, $collections));
+        $this->__respondWithJson($collectionHelper::blankTemplate($atId, get_option('site_title'), $manifests, $collections));
     }
+
+    /**
+     * Renders the top-level collection for the installation. (IIIF v3)
+     * GET oa/top.json
+     */
     
     /**
      * Renders the catalogue tree.

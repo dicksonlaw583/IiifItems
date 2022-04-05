@@ -230,7 +230,7 @@ class IiifItems_Integration_Items extends IiifItems_BaseIntegration {
         if ($this->_isntIiifDisplayableItem($item)) {
             return;
         }
-        $iiifUrl = public_full_url(array('things' => 'items', 'id' => $item->id), 'iiifitems_manifest');
+        $iiifUrl = public_full_url(array('version' => 'oa', 'things' => 'items', 'id' => $item->id), 'iiifitems_manifest');
         echo '<div class="element-set">';
         if (($item->item_type_id == get_option('iiifitems_annotation_item_type'))) {
             echo '<h2>' . __("IIIF Annotation Information") . '</h2>';
@@ -304,7 +304,7 @@ class IiifItems_Integration_Items extends IiifItems_BaseIntegration {
         if ($this->_isntIiifDisplayableItem($item)) {
             return;
         }
-        $iiifUrl = absolute_url(array('things' => 'items', 'id' => $item->id), 'iiifitems_manifest');
+        $iiifUrl = absolute_url(array('version' => 'oa', 'things' => 'items', 'id' => $item->id), 'iiifitems_manifest');
         echo '<div class="element-set">';
         echo '<h2>' . __("IIIF Manifest") . '</h2>';
         if (get_option('iiifitems_show_mirador_items')) {

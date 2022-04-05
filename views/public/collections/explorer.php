@@ -20,7 +20,7 @@
 
         $(function() {
             Manifold.loadManifest({
-                iiifResourceUri: <?php echo js_escape(public_full_url(array('id' => $collection->id), 'iiifitems_collection')); ?>,
+                iiifResourceUri: <?php echo js_escape(public_full_url(array('version' => 'oa', 'id' => $collection->id), 'iiifitems_collection')); ?>,
                 collectionIndex: 0,
                 manifestIndex: 0,
                 sequenceIndex: 0,

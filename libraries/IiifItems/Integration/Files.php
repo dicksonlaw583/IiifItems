@@ -67,7 +67,7 @@ class IiifItems_Integration_Files extends IiifItems_BaseIntegration {
         if ($this->_isntIiifDisplayableFile($args['view']->file)) {
             return;
         }
-        $iiifUrl = public_full_url(array('things' => 'files', 'id' => $args['view']->file->id), 'iiifitems_manifest');
+        $iiifUrl = public_full_url(array('version' => 'oa', 'things' => 'files', 'id' => $args['view']->file->id), 'iiifitems_manifest');
         echo '<div class="element-set">';
         echo '<h2>' . __("IIIF File Information") . '</h2><p>' . __("Manifest URL: %s", '<a href="' . html_escape($iiifUrl). '">' . html_escape($iiifUrl) . '</a>') . '</p>';
         if (get_option('iiifitems_show_mirador_files')) {
